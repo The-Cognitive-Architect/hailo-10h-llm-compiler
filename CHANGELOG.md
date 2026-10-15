@@ -8,6 +8,18 @@ section below (see [CONTRIBUTING.md](CONTRIBUTING.md#releases)).
 The `-dfcX.Y.Z` suffix names the Dataflow Compiler version the release was
 validated against.
 
+## [0.3.1] — Honor checkpoint RMSNorm epsilon (DFC 5.3.0)
+
+### Fixed
+- Step 1 resolves the default epsilon for RMSNorm and headwise QK-Norm
+  after checkpoint configuration is loaded. Previously both helpers kept
+  the import-time `1e-6` default even for checkpoints declaring another
+  epsilon. Explicit function arguments retain their override behavior.
+- CPU regression tests import the actual exporter, load mocked checkpoint
+  configurations, and compare both helpers with direct PyTorch references.
+  They require no model download or DFC. End-to-end compilation and device
+  validation of this correction remain pending; `DFC_VERSION` is unchanged.
+
 ## [0.3.0] — Loadable quantization recipes, faster deep-model compiles (DFC 5.3.0)
 
 ### Added

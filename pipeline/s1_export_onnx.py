@@ -104,7 +104,10 @@ def build_matmul_trick_matrices():
     )
 
 
-def rms_norm(x: torch.Tensor, weight: torch.Tensor, eps: float = config.RMS_EPS) -> torch.Tensor:
+def rms_norm(x: torch.Tensor, weight: torch.Tensor, eps: float | None = None) -> torch.Tensor:
+    # Checkpoint configuration is loaded after this module is imported.
+    if eps is None:
+        eps = config.RMS_EPS
     variance = x.pow(2).mean(-1, keepdim=True)
     x = x * torch.rsqrt(variance + eps)
     return x * weight
@@ -112,10 +115,12 @@ def rms_norm(x: torch.Tensor, weight: torch.Tensor, eps: float = config.RMS_EPS)
 
 def rms_norm_headwise(
     x: torch.Tensor, weight_tiled: torch.Tensor, seg_matrix: torch.Tensor,
-    hd: int, eps: float = config.RMS_EPS,
+    hd: int, eps: float | None = None,
 ) -> torch.Tensor:
     """Per-head RMSNorm (QK-Norm) on a flat `[..., n_heads*hd]` tensor,
     without reshaping to `[..., n_heads, hd]` — see `make_head_seg_matrix`."""
+    if eps is None:
+        eps = config.RMS_EPS
     sumsq = x.pow(2) @ seg_matrix  # [..., n_heads]
     variance = (sumsq @ seg_matrix.T) / hd  # [..., n_heads*hd], broadcast per head
     x = x * torch.rsqrt(variance + eps)

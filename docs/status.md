@@ -3,6 +3,14 @@
 An honest snapshot of what works, what does not, and what is unknown. Read
 this before investing time, and update it when you learn something new.
 
+The step-1 RMSNorm helpers now honor checkpoint epsilon loaded after the
+exporter import. CPU regression tests reproduce the previous mismatch for
+`1e-5` and `1e-4`, cover the unchanged `1e-6` case, and verify explicit
+overrides for both ordinary and headwise RMSNorm. Run
+`python -m unittest discover -s tests -p test_rmsnorm_epsilon.py -v` with
+the step-1 dependencies. The correction has not yet been validated through
+DFC or on hardware and does not resolve the separate quantization findings.
+
 ## The one-paragraph summary
 
 The full compile pipeline works end to end: a Hugging Face checkpoint goes

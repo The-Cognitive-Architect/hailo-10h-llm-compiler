@@ -125,6 +125,7 @@ flow.
 hailo-10h-llm-compiler/
 ├── docker/          Dockerfiles: NVIDIA CUDA base, AMD ROCm base, Jupyter
 ├── pipeline/        The six compile steps + shared config (s1 → s6)
+├── tests/           CPU regressions using the step-1 Python dependencies
 ├── recipes/         Quantization recipes (.alls) step 4 can load
 ├── notebooks/       The same compile chain and the diagnostics tooling,
 │                    as self-contained executable walkthroughs
